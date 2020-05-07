@@ -60,6 +60,7 @@ const App: React.FC = () => {
       }
 
       if (record['research-notes']) {
+        // TODO: fix the interface
         //@ts-ignore
         const notes = record['research-notes'].reduce(
           (result: string, item: any) => {
