@@ -7,7 +7,7 @@ import { parseStringPromise } from 'xml2js';
 interface Record {
   titles: Title[];
   keywords?: Keyword[];
-  'research-notes'?: string[];
+  'research-notes'?: (string | Style)[];
 }
 
 interface Title {
@@ -16,6 +16,10 @@ interface Title {
 
 interface Keyword {
   keyword: string[];
+}
+
+interface Style {
+  style: { _: string }[];
 }
 
 // https://voyant-tools.org/docs/#!/guide/corpuscreator-section-json
@@ -60,27 +64,26 @@ const App: React.FC = () => {
       }
 
       if (record['research-notes']) {
-        // TODO: fix the interface
-        //@ts-ignore
+        const sanitize = (item: string): string =>
+          item.replace(/\r?\n|\r/g, ' ');
+
         const notes = record['research-notes'].reduce(
-          (result: string, item: any) => {
+          (result: string, item) => {
             if (typeof item === 'string') {
-              const sanitized = item.replace(/\r?\n|\r/g, ' ');
+              const sanitized = sanitize(item);
               return result.concat(sanitized, ' ');
-            } else {
-              // const sanitized = item.style['_'].replace(/\r?\n|\r/g, ' ');
-              const styleContents = item.style.reduce(
-                (result: string, item: any) => {
-                  if (item._) {
-                    const sanitized = item._.replace(/\r?\n|\r/g, ' ');
-                    return result.concat(sanitized, ' ');
-                  } else {
-                    return result;
-                  }
-                },
-                ''
-              );
+            } else if (item.style) {
+              const styleContents = item.style.reduce((result: string, i) => {
+                if (i._) {
+                  const sanitized = sanitize(i._);
+                  return result.concat(sanitized, ' ');
+                } else {
+                  return result;
+                }
+              }, '');
               return result.concat(styleContents, ' ');
+            } else {
+              return result;
             }
           },
           ''
