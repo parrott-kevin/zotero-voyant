@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.js": "/static/js/main.e16eedc2.chunk.js",
-    "main.js.map": "/static/js/main.e16eedc2.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.b3bd33d4.js",
-    "runtime-main.js.map": "/static/js/runtime-main.b3bd33d4.js.map",
-    "static/js/2.1be3efa7.chunk.js": "/static/js/2.1be3efa7.chunk.js",
-    "static/js/2.1be3efa7.chunk.js.map": "/static/js/2.1be3efa7.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.fd1c50133711c73c33ea2e87e1c29a53.js": "/precache-manifest.fd1c50133711c73c33ea2e87e1c29a53.js",
-    "service-worker.js": "/service-worker.js",
-    "static/js/2.1be3efa7.chunk.js.LICENSE.txt": "/static/js/2.1be3efa7.chunk.js.LICENSE.txt"
+    "main.js": "/zotero-voyant/static/js/main.e16eedc2.chunk.js",
+    "main.js.map": "/zotero-voyant/static/js/main.e16eedc2.chunk.js.map",
+    "runtime-main.js": "/zotero-voyant/static/js/runtime-main.335fe5a9.js",
+    "runtime-main.js.map": "/zotero-voyant/static/js/runtime-main.335fe5a9.js.map",
+    "static/js/2.1be3efa7.chunk.js": "/zotero-voyant/static/js/2.1be3efa7.chunk.js",
+    "static/js/2.1be3efa7.chunk.js.map": "/zotero-voyant/static/js/2.1be3efa7.chunk.js.map",
+    "index.html": "/zotero-voyant/index.html",
+    "precache-manifest.11167f55fab381846a641f93128f06e4.js": "/zotero-voyant/precache-manifest.11167f55fab381846a641f93128f06e4.js",
+    "service-worker.js": "/zotero-voyant/service-worker.js",
+    "static/js/2.1be3efa7.chunk.js.LICENSE.txt": "/zotero-voyant/static/js/2.1be3efa7.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.b3bd33d4.js",
+    "static/js/runtime-main.335fe5a9.js",
     "static/js/2.1be3efa7.chunk.js",
     "static/js/main.e16eedc2.chunk.js"
   ]
