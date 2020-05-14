@@ -1,5 +1,6 @@
 {
   "name": "zotero-voyant",
+  "homepage": "https://parrott-kevin.github.io/zotero-voyant/",
   "version": "0.1.0",
   "private": true,
   "scripts": {
