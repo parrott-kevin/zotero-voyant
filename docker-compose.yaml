@@ -3,7 +3,6 @@ services:
   app:
     build: .
     user: 'root'
-    # command: ash -c 'yarn start'
     command: ash -c 'tail -f /dev/null'
     ports:
       - '8080:8080'
