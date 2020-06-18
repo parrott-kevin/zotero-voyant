@@ -1,0 +1,19 @@
+{
+  "name": "Zotero-Voyant",
+  "dockerComposeFile": "../docker-compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/www/",
+  // Use 'settings' to set *default* container specific settings.json values on container create.
+  // You can edit these settings after create using File > Preferences > Settings > Remote.
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/ash"
+  },
+  // Add the IDs of extensions you want installed when the container is created in the array below.
+  "extensions": [
+	"dbaeumer.vscode-eslint",
+	"esbenp.prettier-vscode",
+	"gruntfuggly.todo-tree",
+	"ms-azuretools.vscode-docker",
+	"dotjoshjohnson.xml"
+]
+}
