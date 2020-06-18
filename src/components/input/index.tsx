@@ -1,53 +1,88 @@
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import React, { useState } from 'react';
+import { styled } from '@material-ui/core/styles';
+import React, { useRef, useState } from 'react';
 
 import viewModel from './viewModel';
 
-interface Props {
-  setOutput: React.Dispatch<React.SetStateAction<string>>;
-}
+const HiddenInput = styled('input')({
+  display: 'none',
+});
 
-const Input: React.FC<Props> = ({ setOutput }) => {
-  const [value, setValue] = useState('');
+const Input: React.FC = () => {
+  const [data, setData] = useState('');
+  const inputEl = useRef<HTMLInputElement | null>(null);
 
   const vm = new viewModel();
 
-  const handleChange = (value: string): void => {
-    setValue(value);
+  const handleClick = (): void => {
+    inputEl.current?.click();
   };
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
+  const handleUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
-    event.preventDefault();
-    const corpus = await vm.process(value);
-    // output multiple files
-    setOutput(JSON.stringify({ data: corpus }));
+    if (event.target.files) {
+      const file = event.target.files[0];
+      const result = await vm.handleUpload(file);
+      if (result) {
+        setData(result);
+      }
+    }
+  };
+
+  const handleReset = (): void => {
+    setData('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            label="input"
-            multiline
-            rows={10}
-            variant="outlined"
-            fullWidth
-            value={value}
-            onChange={(event): void => handleChange(event.target.value)}
+    <Grid container direction="column" spacing={2}>
+      {!data ? (
+        <Grid item xs={12} sm={6}>
+          <HiddenInput
+            ref={inputEl}
+            type="file"
+            id="upload"
+            onChange={(e): void => {
+              handleUpload(e);
+            }}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary">
-            Submit
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleClick}
+            fullWidth
+          >
+            Upload XML file
           </Button>
         </Grid>
-      </Grid>
-    </form>
+      ) : (
+        <>
+          <Grid item xs={12} sm={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              href={data}
+              download="data.json"
+              fullWidth
+            >
+              Download
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              type="button"
+              onClick={handleReset}
+              fullWidth
+            >
+              Reset
+            </Button>
+          </Grid>
+        </>
+      )}
+    </Grid>
   );
 };
 export default Input;

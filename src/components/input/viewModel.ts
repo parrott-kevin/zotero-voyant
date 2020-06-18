@@ -31,6 +31,40 @@ interface Corpus {
 }
 
 export default class InputViewModel {
+  async handleUpload(file: File): Promise<string | undefined> {
+    try {
+      const fileContents = await this.readUploadedFileAsText(file);
+      if (typeof fileContents === 'string') {
+        const processed = await this.process(fileContents);
+        const encoded = encodeURIComponent(JSON.stringify({ data: processed }));
+        const result = `data:application/json;charset=utf-8,${encoded}`;
+        return result;
+      } else {
+        throw new Error('Problem parsing input file');
+      }
+    } catch (err) {
+      console.error(err.message);
+      return;
+    }
+  }
+
+  async readUploadedFileAsText(
+    inputFile: Blob
+  ): Promise<string | ArrayBuffer | null> {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onerror = (): void => {
+        reader.abort();
+        reject(new DOMException('Problem parsing input file'));
+      };
+
+      reader.onload = (): void => {
+        resolve(reader.result);
+      };
+      reader.readAsText(inputFile, 'UTF-8');
+    });
+  }
+
   async process(value: string): Promise<Corpus[]> {
     const xmlParsed = await parseStringPromise(value);
     const result = JSON.parse(JSON.stringify(xmlParsed));
