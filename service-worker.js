@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/zotero-voyant/precache-manifest.11167f55fab381846a641f93128f06e4.js"
+  "/zotero-voyant/precache-manifest.3ca149ecf5e293a043d62a94a7d9385f.js"
 );
 
 self.addEventListener('message', (event) => {
