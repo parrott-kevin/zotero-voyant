@@ -4,6 +4,8 @@ interface Record {
   titles: Title[];
   keywords?: Keyword[];
   'research-notes'?: (string | Style)[];
+  'ref-type'?: RefType[]; // Item Type
+  'work-type'?: string[]; // Website Type
 }
 
 interface Title {
@@ -18,6 +20,11 @@ interface Style {
   style: { _: string }[];
 }
 
+interface RefType {
+  $: { name: string };
+  _: string;
+}
+
 // https://voyant-tools.org/docs/#!/guide/corpuscreator-section-json
 interface Corpus {
   title: string;
@@ -30,12 +37,19 @@ interface Corpus {
   collection?: string;
 }
 
+export interface Fields {
+  keywords: boolean;
+  researchNotes: boolean;
+  refType: boolean;
+  workType: boolean;
+}
+
 export default class InputViewModel {
-  async handleUpload(file: File): Promise<string | undefined> {
+  async handleUpload(file: File, fields: Fields): Promise<string | undefined> {
     try {
       const fileContents = await this.readUploadedFileAsText(file);
       if (typeof fileContents === 'string') {
-        const processed = await this.process(fileContents);
+        const processed = await this.process(fileContents, fields);
         const encoded = encodeURIComponent(JSON.stringify({ data: processed }));
         const result = `data:application/json;charset=utf-8,${encoded}`;
         return result;
@@ -65,7 +79,7 @@ export default class InputViewModel {
     });
   }
 
-  async process(value: string): Promise<Corpus[]> {
+  async process(value: string, fields: Fields): Promise<Corpus[]> {
     const xmlParsed = await parseStringPromise(value);
     const result = JSON.parse(JSON.stringify(xmlParsed));
 
@@ -76,14 +90,30 @@ export default class InputViewModel {
       }, '');
 
       const content = [];
-      if (record.keywords) {
-        const words = record.keywords.reduce((result: string, item) => {
-          return result.concat(item.keyword.join(' '), ' ');
-        }, '');
+      if (fields.keywords && record.keywords) {
+        const words = record.keywords
+          .reduce((result: string, item) => {
+            return result.concat(item.keyword.join(' '), ' ');
+          }, '')
+          .trim();
         content.push(words);
       }
 
-      if (record['research-notes']) {
+      if (fields.refType && record['ref-type']) {
+        const refTypes = record['ref-type']
+          .reduce((result: string, i) => {
+            return result.concat(i.$.name, ' ');
+          }, '')
+          .trim();
+        content.push(refTypes);
+      }
+
+      if (fields.workType && record['work-type']) {
+        const work = record['work-type'].join(' ');
+        content.push(work);
+      }
+
+      if (fields.researchNotes && record['research-notes']) {
         const sanitize = (item: string): string =>
           item.replace(/\r?\n|\r/g, ' ');
 
